@@ -1,0 +1,84 @@
+﻿@model IEnumerable<CarRentingWebApp.Models.Rent>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var IsAdmin = "";
+    var sessionName = new Byte[30];
+}
+
+<h1>Index</h1>
+
+@{
+    if (Context.Session.TryGetValue("IsAdmin", out sessionName))
+    {
+        IsAdmin = System.Text.Encoding.Default.GetString(sessionName);
+    }
+    else
+    {
+        IsAdmin = "false";
+    }
+}
+
+@{
+    @if (IsAdmin.Equals("true"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Car Id
+            </th>
+            <th>
+                User Id
+            </th>
+            <th>
+                Date rented
+            </th>
+            <th>
+                Date of return
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTaken)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+
+                @if (IsAdmin.Equals("true"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

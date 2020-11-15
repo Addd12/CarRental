@@ -1,0 +1,109 @@
+﻿@model CarRentingWebApp.ViewModels.CarViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int count = 0;
+    var IsAdmin = "";
+    var sessionName = new Byte[30];
+}
+
+<h1>Index</h1>
+
+@{
+    if (Context.Session.TryGetValue("IsAdmin", out sessionName))
+    {
+        IsAdmin = System.Text.Encoding.Default.GetString(sessionName);
+    }
+    else
+    {
+        IsAdmin = "false";
+    }
+}
+
+@{
+    @if (IsAdmin.Equals("true"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+
+@using (Html.BeginForm("Index", "Cars", FormMethod.Get))
+{
+    <div class="form-group row">
+        <div class="col">
+            <input type="text" placeholder="Search brand" class="form-control" asp-for="Search">
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Search" class="btn btn-success" />
+        </div>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Count</th>
+            <th>
+                Brand
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Seats
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        @foreach (var car in Model.Cars)
+        {
+            count++;
+            <tr>
+                <td>
+                    @count
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => car.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => car.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => car.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => car.Seats)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => car.Price)
+                </td>
+
+                @if (IsAdmin.Equals("true"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@car.CarId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@car.CarId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@car.CarId">Delete</a>
+                    </td>
+                }
+
+                <td>
+                    <a asp-action="Create" asp-controller="Reviews" asp-route-id="@car.CarId">Add Review</a> |
+                    <a asp-action="Create" asp-controller="Rents" asp-route-id="@car.CarId">Rent</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

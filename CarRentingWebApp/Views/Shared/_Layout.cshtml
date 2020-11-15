@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - caRent</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">caRent</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ul class="navbar-nav ml-auto">
+                    @{
+                        var sessionName = new Byte[30];
+                        var IsLoggedIn = "";
+                        var IsAdmin = "";
+                        if (Context.Session.TryGetValue("IsLoggedIn", out sessionName))
+                        {
+                            IsLoggedIn = System.Text.Encoding.Default.GetString(sessionName);
+                        }
+                        else
+                        {
+                            IsLoggedIn = "false";
+                        }
+                        if (Context.Session.TryGetValue("IsAdmin", out sessionName))
+                        {
+                            IsAdmin = System.Text.Encoding.Default.GetString(sessionName);
+                        }
+                        else
+                        {
+                            IsAdmin = "false";
+                        }
+
+
+                    }
+
+                    @if (IsLoggedIn.Equals("true"))
+                    {
+                        if (IsAdmin.Equals("true"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Rents" asp-action="Index">Rents</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Cars</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-action="Index" asp-controller="Reviews">All Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="UserAccount">Account</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Login">Login</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Register">Register</a></li>
+                    }
+                </ul>
+
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2019 - caRent - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

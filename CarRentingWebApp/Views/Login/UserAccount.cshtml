@@ -1,0 +1,13 @@
+﻿@model CarRentingWebApp.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = ViewBag.Username;
+}
+@Html.AntiForgeryToken()
+
+<div class="card">
+    <div class="card-body">
+        Hello, @Model.Username
+    </div>
+</div>
+
